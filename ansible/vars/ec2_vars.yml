@@ -1,0 +1,55 @@
+us:
+  subnet_id: "subnet-17feca3f"
+  region: "us-east-1"
+  keypair: "security"
+  group: "strongdm-bastion"
+  server_name: "{{username}}-Bastion"
+  ami_id: "ami-0778521d914d23bc1"
+  keyfile: "security-us.pem"
+
+eu-central-1:
+  subnet_id: "subnet-ee339f85"
+  region: "eu-central-1"
+  keypair: "security-eu"
+  group: "strongdm-bastion"
+  server_name: "{{username}}-Bastion"
+  ami_id: "ami-076bdd070268f9b8d"
+  keyfile: "security-eu.pem"
+
+ap-south-1:
+  subnet_id: "subnet-0f43c8bfda598f044"
+  region: "ap-south-1"
+  keypair: "security_india"
+  group: "strongdm-bastion"
+  server_name: "{{username}}-Bastion"
+  ami_id: "ami-0597375488017747e"
+  keyfile: "security_india.pem"
+
+
+us-east-2:
+  subnet_id: "subnet-00315022ebb5fc52a"
+  region: "us-east-2"
+  keypair: "security-ohio"
+  group: "strongdm-bastion"
+  server_name: "{{username}}-Bastion"
+  ami_id: "ami-03a0c45ebc70f98ea"
+  keyfile: "security-ohio.pem"
+
+ap-southeast-1:
+  subnet_id: "subnet-0dad347a5f797e749"
+  region: "ap-southeast-1"
+  keypair: "secops-dc05"
+  group: "sg-0d4ea267c0ce8232a"
+  server_name: "{{username}}-Bastion"
+  ami_id: "ami-06df38320cecdd700"
+  keyfile: "secops-dc05.pem"
+
+
+
+
+
+
+
+
+
+

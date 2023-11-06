@@ -1,0 +1,41 @@
+- name: Creating a bastion instance on Prod-AWS
+  # vars:
+  #   subnet_id: {{region}}.subnet_id
+  #   region: {{region}}.subnet_id
+  #   keypair: {{region}}.subnet_id
+  #   group: {{region}}.subnet_id
+  #   server_name: {{region}}.subnet_id
+  #   ami_id: {{region}}.subnet_id
+  #   keyfile: "security-us.pem"
+  ec2_instance:
+    vpc_subnet_id: "{{ subnet_id }}"
+    region: "{{ region }}"
+    instance_type: t2.small
+    key_name: "{{ keypair }}"
+    security_group: "{{ group }}"
+    wait: yes
+    termination_protection: no
+    network:
+      assign_public_ip: true
+    iam_instance_profile: "strongdm-bastion-role"
+    image_id: "{{ ami_id }}"
+    tags:
+      Name: "{{ server_name }}"
+      Business: "security"
+      Owner: Pulkit
+      Service: bastion
+  register: ec2_instance
+
+- name: Add new instance to host group
+  add_host:
+    hostname: "{{ item.private_ip_address }}"
+    groupname: sdm-bastion
+    ansible_ssh_private_key_file: /Users/rushilsaxena/Downloads/awskeys/{{ keyfile }}
+  loop: "{{ ec2_instance.instances }}"
+
+- name: Wait for SSH to come up
+  delegate_to: "{{ item.private_ip_address }}"
+  wait_for_connection:
+    delay: 60
+    timeout: 320
+  loop: "{{ ec2_instance.instances }}"

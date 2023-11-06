@@ -1,0 +1,7 @@
+subnet_id: "subnet-00315022ebb5fc52a"
+region: "us-east-2"
+keypair: "security-ohio"
+group: "strongdm-bastion"
+server_name: "{{username}}-Bastion"
+ami_id: "ami-03a0c45ebc70f98ea"
+keyfile: "security-ohio.pem"

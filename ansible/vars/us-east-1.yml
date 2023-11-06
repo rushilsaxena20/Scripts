@@ -1,0 +1,7 @@
+subnet_id: "subnet-17feca3f"
+region: "us-east-1"
+keypair: "security"
+group: "strongdm-bastion"
+server_name: "{{username}}-Bastion"
+ami_id: "ami-0778521d914d23bc1"
+keyfile: "security-us.pem"

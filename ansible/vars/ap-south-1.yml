@@ -1,0 +1,7 @@
+subnet_id: "subnet-0f43c8bfda598f044"
+region: "ap-south-1"
+keypair: "security_india"
+group: "strongdm-bastion"
+server_name: "{{username}}-Bastion"
+ami_id: "ami-0597375488017747e"
+keyfile: "security_india.pem"

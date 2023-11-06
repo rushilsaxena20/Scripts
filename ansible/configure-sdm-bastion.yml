@@ -1,0 +1,87 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars/{{region}}.yml
+  roles:
+    - { role: create-instance }
+
+- hosts: sdm-bastion
+  become: yes
+  remote_user: ubuntu
+  gather_facts: yes
+  vars_files:
+    - vars/base_vars.yml
+    - vars/server_vars.yml
+    - vars/client_vars.yml
+  roles:
+    - { role: configure-bastion, tags: ['bastion'] }
+
+- hosts: ca
+  become: true
+  gather_facts: false
+  remote_user: ubuntu
+  tasks:
+    - name: Create a directory to store a user data
+      file:
+        path: '/home/ubuntu/users_keys_rsa256/{{username}}-{{region}}/'
+        state: directory
+
+    - name: Get a random number for user_id
+      shell: python3 -c "import hashlib; print(abs(hash('{{username}}')) % (10 ** 8))"
+      register: user_id
+
+    - name: Copy user pub key
+      lineinfile:
+        path: '/home/ubuntu/users_keys_rsa256/{{username}}-{{region}}/{{username}}_id_rsa_{{user_id.stdout}}.pub'
+        line: "{{ hostvars[groups['sdm-bastion'][0]]['user_ssh_key']['stdout'] }}"
+        create: yes
+        state: present
+
+    - name: Generate certificate from CA
+      shell: "ssh-keygen -s /home/ubuntu/moe-ca-rsa256/ca -I {{username}}  -n {{team_name}} -t rsa-sha2-256 -z {{user_id.stdout}} -P {{key_password}} /home/ubuntu/users_keys_rsa256/{{username}}-{{region}}/{{username}}_id_rsa_{{user_id.stdout}}.pub"
+
+    - shell: cat "/home/ubuntu/users_keys_rsa256/{{username}}-{{region}}/{{username}}_id_rsa_{{user_id.stdout}}-cert.pub"
+      register: user_pub_cert
+
+    - name: Get public key created on bastion
+      set_fact:
+        user_cert: "{{ hostvars[groups['ca'][0]]['user_pub_cert']['stdout'] }}"
+
+- hosts: sdm-bastion
+  become: yes
+  remote_user: ubuntu
+  gather_facts: yes
+  vars_files:
+    - vars/base_vars.yml
+    - vars/server_vars.yml
+    - vars/client_vars.yml
+  tasks:
+    - name: Make user to read-only
+      shell: chattr -R -i /home/{{ username }}/
+      become: yes
+
+    - name: Paste certificate to SSH directory.
+      copy:
+        dest: '/home/{{ username }}/.ssh/id_rsa-cert.pub'
+        content: "{{ hostvars[groups['ca'][0]]['user_pub_cert']['stdout'] }}"
+        
+    - name: Configure server to trust certificate authority public key.
+      copy:
+        dest: '/home/{{ username }}/.ssh/known_hosts'
+        content: "@cert-authority * {{ public_ca_key }}"
+
+    - name: Changing permission of known hosts.
+      shell: 'chown {{username}}:{{username}} /home/{{ username }}/.ssh/known_hosts'
+      become: yes
+
+    # - name: Script to configure the instance on strongDM
+    #   script: sdm.sh {{ username }}
+    #   become: yes
+
+    # - name: Make user to read-only
+    #   shell: chattr -R +i /home/{{ username }}/
+    #   become: yes 
+
+  

@@ -1,0 +1,7 @@
+subnet_id: "subnet-ee339f85"
+region: "eu-central-1"
+keypair: "security-eu"
+group: "strongdm-bastion"
+server_name: "{{username}}-Bastion"
+ami_id: "ami-076bdd070268f9b8d"
+keyfile: "security-eu.pem"
