@@ -1,0 +1,14 @@
+[dc01]
+172.31.128.59 python_path=/home/ubuntu/venv/bin/python3
+
+[dc03]
+172.31.128.59 python_path=/home/ubuntu/venv/bin/python3
+
+[dc02]
+172.31.128.59 python_path=/home/ubuntu/venv/bin/python3
+
+[dc04]
+34.202.254.85 python_path=/home/ubuntu/venv/bin/python3
+
+[stage]
+10.66.13.17 python_path=/usr/bin/python3

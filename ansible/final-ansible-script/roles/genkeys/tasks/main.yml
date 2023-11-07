@@ -1,0 +1,24 @@
+- name: Make a directory for client
+  file:
+    path: /home/ubuntu/encryption_project/{{ clientname }}
+    state: directory
+
+- name: Running the sign.sh script which will create Key pair for client
+  script: /home/ubuntu/encryption_project/sign.sh {{ clientname }}
+  args:
+    chdir: /home/ubuntu/encryption_project/{{ clientname }}
+
+- name: Run a script using an executable in a system path
+  become: yes
+  script: /home/ubuntu/encryption_project/aws-sm.py {{clientname}} /home/ubuntu/encryption_project/{{ clientname }}/public_{{ clientname }}.pem /home/ubuntu/encryption_project/{{ clientname }}/private_{{ clientname }}.pem {{region}} {{service}} {{accountid}} {{dctype}} {{envtype}}
+  args: 
+    executable: "{{ python_path }}"
+  register: scriptvalue
+
+- debug: var=scriptvalue.stdout
+    
+- shell: cat "/home/ubuntu/encryption_project/{{ clientname }}/public_{{ clientname }}.pem"
+  register: public_key
+
+- debug: var=public_key.stdout
+  

@@ -1,0 +1,22 @@
+---
+
+- hosts: "{{ DC }}"
+  become: yes
+  remote_user: ubuntu
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  gather_facts: yes
+  roles:
+    - { role: genkeys }
+
+- hosts: localhost
+
+  tasks:
+  - name: Get public key created on bastion
+    set_fact:
+      user_cert: "{{ hostvars[groups['{{ DC }}'][0]]['public_key']['stdout'] }}"
+
+  - name: "Copying the file"
+  	copy:
+    	content: {{user_cert}}
+    	dest: /tmp/public_key
