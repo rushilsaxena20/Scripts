@@ -4,7 +4,7 @@ def checkrepo(repos):
     badrep=[]
     headers = {
         'Accept': 'application/vnd.github+json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer <token>',
         'X-GitHub-Api-Version': '2022-11-28',
     }
     for repo in repos:
