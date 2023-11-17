@@ -4,7 +4,7 @@ import json
 def listusers():
     headers = {
         'Accept': 'application/vnd.github+json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer <token>',
         'X-GitHub-Api-Version': '2022-11-28',
     }
     qp = {
@@ -33,7 +33,7 @@ def listusers():
 def checkuser():
     headers = {
         'Accept': 'application/vnd.github+json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer <token>',
         'X-GitHub-Api-Version': '2022-11-28',
     }
     username = 'umangmoe'
@@ -52,7 +52,7 @@ def checkuser():
 def inviteuser(email):
     headers = {
         'Accept': 'application/vnd.github+json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer <token>',
         'X-GitHub-Api-Version': '2022-11-28',
     }
     data = {"email":"","role":"direct_member","team_ids":[]}
@@ -66,7 +66,7 @@ def inviteuser(email):
 def listteams(team_name):
     headers = {
         'Accept': 'application/vnd.github+json',
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer <token>',
         'X-GitHub-Api-Version': '2022-11-28',
         'Content-Type': 'application/x-www-form-urlencoded',
     }
